@@ -1,5 +1,6 @@
 import express from 'express';
-import { StatusCodes } from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes';
+import joiValidator from 'express-joi-validation';
 
 import status from './status';
 import {
@@ -10,28 +11,32 @@ import {
     getAutoSuggestUsers
 } from '../services';
 
+import schema from '../validation/schema';
+
 const router = express.Router();
+
+const validator = joiValidator.createValidator({});
 
 router.get('/', (req, res) => {
     res.status(StatusCodes.OK).send(status.REST_AVAILABLE);
 })
 
-router.post('/user', (req, res, next) => {
+router.post('/user', validator.body(schema), (req, res) => {
     createUser(req.body);
     res.status(StatusCodes.CREATED).send(status.CREATED);
 });
 
-router.get('/users/:id', (req, res, next) => {
+router.get('/users/:id', (req, res) => {
     const user = getUserById(req.params?.id);
     res.json(user);
 });
 
-router.delete('/users/:id', (req, res, next) => {
+router.delete('/users/:id', (req, res) => {
     removeUser(req.params?.id);
     res.status(StatusCodes.OK).send(status.REMOVED);
 });
 
-router.post('/users/:id', (req, res) => {
+router.post('/users/:id', validator.body(schema), (req, res) => {
     updateUser(req.params.id,req.body);
     res.status(StatusCodes.OK).send(status.UPDATED);
 })

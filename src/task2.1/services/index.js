@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-const users = [];
+export const users = [];
 
 export const createUser = (user) => {
     users.push({
@@ -28,10 +28,9 @@ export const updateUser = (id, user) => {
 }
 
 export const getAutoSuggestUsers = (loginSubstr, limit) => {
-    if(!loginSubstr) return users.slice(0, limit);
+    if(!loginSubstr) return users.filter(user => !user.isDeleted).slice(0, limit);
 
     return users
-        .filter(user => user.login.indexOf(loginSubstr) !== -1)
+        .filter(user => !user.isDeleted && (user.login.indexOf(loginSubstr) !== -1))
         .slice(0,limit);
 }
-

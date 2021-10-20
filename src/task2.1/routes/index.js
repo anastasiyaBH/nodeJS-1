@@ -19,7 +19,7 @@ const validator = joiValidator.createValidator({});
 
 router.get('/', (req, res) => {
     res.status(StatusCodes.OK).send(status.REST_AVAILABLE);
-})
+});
 
 router.post('/user', validator.body(schema), (req, res) => {
     createUser(req.body);
@@ -37,15 +37,15 @@ router.delete('/users/:id', (req, res) => {
 });
 
 router.post('/users/:id', validator.body(schema), (req, res) => {
-    updateUser(req.params.id,req.body);
+    updateUser(req.params.id, req.body);
     res.status(StatusCodes.OK).send(status.UPDATED);
-})
+});
 
-router.get('/users',(req, res) => {
+router.get('/users', (req, res) => {
     const searchQuery = req.query.query;
     const limit = req.query.limit || 10;
     getAutoSuggestUsers(searchQuery, limit);
-    res.json(getAutoSuggestUsers(searchQuery, limit));
-})
+    res.json(getAutoSuggestUsers(searchQuery, limit)  );
+});
 
 export default router;

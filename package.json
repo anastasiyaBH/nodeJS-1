@@ -8,7 +8,8 @@
     "task1": "nodemon src/task1/task1.js",
     "task2": "nodemon ./src/task2/task2.js",
     "task3": "babel-node ./src/task3/task3.js",
-    "task2.1": "babel-node ./src/task2.1/index.js"
+    "task2.1": "babel-node ./src/task2.1/index.js",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -16,16 +17,22 @@
   },
   "author": "Anastasiya But-Husaim",
   "license": "ISC",
+  "lint-staged": {
+    "*.js": "eslint --cache --fix"
+  },
   "bugs": {
     "url": "https://github.com/anastasiyaBH/nodeJS-1/issues"
   },
   "homepage": "https://github.com/anastasiyaBH/nodeJS-1#readme",
   "devDependencies": {
     "@babel/cli": "^7.15.7",
-    "@babel/core": "^7.15.5",
+    "@babel/core": "^7.15.8",
+    "@babel/eslint-parser": "^7.15.8",
     "@babel/node": "^7.15.4",
     "@babel/preset-env": "^7.15.6",
     "eslint": "^5.16.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.2.3",
     "nodemon": "^2.0.13"
   },
   "dependencies": {

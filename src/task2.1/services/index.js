@@ -6,31 +6,29 @@ export const createUser = (user) => {
     users.push({
         ...user,
         id: uuid(),
-        isDeleted: false,
+        isDeleted: false
     });
-}
+};
 
 export const getUserById = (id) => users.find(user => user.id === id);
 
 export const removeUser = (id) => {
-    const removedUserIndex = users.findIndex((user) =>
-    {
-        console.log(user.id, id);
-        return user.id === id
+    const removedUserIndex = users.findIndex((user) => {
+        return user.id === id;
     });
-    const userInfo = {...users[removedUserIndex], isDeleted: true};
-    users.splice(removedUserIndex, 1, userInfo)
-}
+    const userInfo = { ...users[removedUserIndex], isDeleted: true };
+    users.splice(removedUserIndex, 1, userInfo);
+};
 
 export const updateUser = (id, user) => {
-    const updatedUserIndex = users.findIndex((user) => user.id === id);
-    users.splice(updatedUserIndex, 1, {...users[updatedUserIndex], ...user})
-}
+    const updatedUserIndex = users.findIndex((entity) => entity.id === id);
+    users.splice(updatedUserIndex, 1, { ...users[updatedUserIndex], ...user });
+};
 
 export const getAutoSuggestUsers = (loginSubstr, limit) => {
-    if(!loginSubstr) return users.filter(user => !user.isDeleted).slice(0, limit);
+    if (!loginSubstr) return users.filter(user => !user.isDeleted).slice(0, limit);
 
     return users
         .filter(user => !user.isDeleted && (user.login.indexOf(loginSubstr) !== -1))
-        .slice(0,limit);
-}
+        .slice(0, limit);
+};

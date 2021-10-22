@@ -10,7 +10,7 @@ export const createUser = (user) => {
     });
 };
 
-export const getUserById = (id) => users.find(user => user.id === id);
+export const getUserById = (id) => users.find(user => user.id === id && !user.isDeleted);
 
 export const removeUser = (id) => {
     const removedUserIndex = users.findIndex((user) => {
@@ -25,10 +25,26 @@ export const updateUser = (id, user) => {
     users.splice(updatedUserIndex, 1, { ...users[updatedUserIndex], ...user });
 };
 
+const usersComparatorByLogin = (a, b) => {
+    if (a.login < b.login) {
+        return -1;
+    }
+    if (a.login > b.login) {
+        return 1;
+    }
+    return 0;
+};
+
 export const getAutoSuggestUsers = (loginSubstr, limit) => {
-    if (!loginSubstr) return users.filter(user => !user.isDeleted).slice(0, limit);
+    if (!loginSubstr) {
+        return users
+            .filter(user => !user.isDeleted)
+            .sort(usersComparatorByLogin)
+            .slice(0, limit);
+    }
 
     return users
         .filter(user => !user.isDeleted && (user.login.indexOf(loginSubstr) !== -1))
+        .sort(usersComparatorByLogin)
         .slice(0, limit);
 };

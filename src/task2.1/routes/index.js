@@ -28,7 +28,12 @@ router.post('/user', validator.body(schema), (req, res) => {
 
 router.get('/users/:id', (req, res) => {
     const user = getUserById(req.params?.id);
-    res.json(user);
+
+    if (!user) {
+        res.status(StatusCodes.NOT_FOUND).send(status.USER_NOT_FOUND);
+    } else {
+        res.json(user);
+    }
 });
 
 router.delete('/users/:id', (req, res) => {
@@ -45,7 +50,7 @@ router.get('/users', (req, res) => {
     const searchQuery = req.query.query;
     const limit = req.query.limit || 10;
     getAutoSuggestUsers(searchQuery, limit);
-    res.json(getAutoSuggestUsers(searchQuery, limit)  );
+    res.json(getAutoSuggestUsers(searchQuery, limit));
 });
 
 export default router;

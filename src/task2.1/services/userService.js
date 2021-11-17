@@ -41,9 +41,6 @@ class UserService {
             where: {
                 login: {
                     [Op.substring]: loginSubstr || ''
-                },
-                is_deleted: {
-                    [Op.is]: false
                 }
             },
             limit: limit || APP_CONFIG.DEFAULT_LIMIT,

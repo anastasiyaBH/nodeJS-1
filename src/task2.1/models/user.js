@@ -14,8 +14,7 @@ class User extends Model {
                 unique: true
             },
             password: DataTypes.STRING,
-            age: DataTypes.INTEGER,
-            is_deleted: DataTypes.BOOLEAN
+            age: DataTypes.INTEGER
         }, { sequelize, tableName: 'user' });
     }
 }

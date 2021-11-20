@@ -6,7 +6,7 @@ import APP_CONFIG from '../config';
 
 class UserService {
     async createUser(user) {
-        return await User.create({ ...user, id: uuid(), is_deleted: false });
+        return await User.create({ ...user, id: uuid() });
     }
 
     async getUserById(id) {

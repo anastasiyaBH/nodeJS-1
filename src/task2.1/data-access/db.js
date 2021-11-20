@@ -5,6 +5,7 @@ const db = new Sequelize(APP_CONFIG.DB_NAME, APP_CONFIG.DB_USERNAME, APP_CONFIG.
     host: APP_CONFIG.DB_HOST,
     port: APP_CONFIG.DB_PORT,
     dialect: 'postgres',
+    omitNull: true,
     define: {
         timestamps: false
     }

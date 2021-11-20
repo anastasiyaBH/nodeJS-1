@@ -8,11 +8,15 @@ Group.initModel(db);
 UserGroup.initModel(db);
 
 User.belongsToMany(Group, {
-    through: UserGroup
+    through: UserGroup,
+    foreignKey: 'user_id',
+    onDelete: 'cascade'
 });
 
 Group.belongsToMany(User, {
-    through: UserGroup
+    through: UserGroup,
+    foreignKey: 'group_id',
+    onDelete: 'cascade'
 });
 
 export {

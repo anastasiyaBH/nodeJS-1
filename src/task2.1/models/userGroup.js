@@ -6,8 +6,9 @@ class UserGroup  extends Model {
     static initModel(sequelize) {
         UserGroup.init({
             id: {
-                type: DataTypes.NUMBER,
-                primaryKey: true
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
             },
             user_id: {
                 type: DataTypes.UUIDV4,

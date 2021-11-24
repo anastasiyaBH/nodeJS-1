@@ -1,21 +1,20 @@
 import { DataTypes, Model } from 'sequelize';
 
-class User extends Model {
+class Group extends Model {
     static initModel(sequelize) {
-        User.init({
+        Group.init({
             id: {
                 type: DataTypes.UUIDV4,
                 allowNull: false,
                 primaryKey: true
             },
-            login: {
+            name: {
                 type: DataTypes.STRING,
                 unique: true
             },
-            password: DataTypes.STRING,
-            age: DataTypes.INTEGER
-        }, { sequelize, tableName: 'user' });
+            permissions: DataTypes.ARRAY(DataTypes.ENUM('READ', 'WRITE', 'DELETE', 'SHARE', 'UPLOAD_FILES'))
+        }, { sequelize, tableName: 'group' });
     }
 }
 
-export default User;
+export default Group;

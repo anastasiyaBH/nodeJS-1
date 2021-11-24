@@ -1,4 +1,6 @@
-import { UserGroup } from '../models';
+import { Op } from 'sequelize';
+
+import { Group, User } from '../models';
 import dataBase from '../data-access/db';
 
 class UserGroupService {
@@ -9,18 +11,25 @@ class UserGroupService {
     async addUsersToGroup(groupId, userIds) {
         const t = await this.db.transaction();
 
-        const rows = userIds.map(userId => ({
-            user_id: userId,
-            group_id: groupId
-        }));
-
-        await UserGroup.bulkCreate(rows, {
+        const group = await Group.findOne({
+            where: {
+                id: groupId
+            },
             transaction: t
+        });
 
-        })
-            .then(() => {
-                t.commit();
-            });
+        const users = await User.findAll({
+            where: {
+                id: {
+                    [Op.in]: userIds
+                }
+            },
+            transaction: t
+        });
+
+        await group.addUsers(users, { transaction: t });
+
+        await t.commit();
     }
 }
 

@@ -14,9 +14,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(loggerMiddleware);
-app.use(errorMiddleware);
 
 app.use(routes);
+
+app.use(errorMiddleware);
 
 process.on('uncaughtException', (error, origin) => {
     winstonLogger.error('Uncaught Exception:', error, origin);

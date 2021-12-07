@@ -20,7 +20,9 @@ router.post('/user', validator.body(userSchema), async (req, res, next) => {
         .then(() => {
             res.status(StatusCodes.CREATED).send(status.USER_CREATED);
         })
-        .catch((e) => next(e));
+        .catch((e) => {
+            next({ ...e, methodName: 'userService.createUser', args: req.body });
+        });
 });
 
 router.get('/users/:id', async (req, res, next) => {
@@ -32,7 +34,12 @@ router.get('/users/:id', async (req, res, next) => {
                 res.json(user);
             }
         })
-        .catch((e) => next(e));
+        .catch((e) => {
+            next({ ...e,
+                methodName: 'userService.getUserById', args:{
+                    id: req.params?.id
+                } });
+        });
 });
 
 router.delete('/users/:id', async (req, res, next) => {
@@ -40,7 +47,15 @@ router.delete('/users/:id', async (req, res, next) => {
         .then(() => {
             res.status(StatusCodes.OK).send(status.USER_REMOVED);
         })
-        .catch((e) => next(e));
+        .catch((e) => {
+            next({
+                ...e,
+                methodName: 'userService.removeUser',
+                args: {
+                    id: req.params?.id
+                }
+            });
+        });
 });
 
 router.post('/users/:id', validator.body(userSchema), async (req, res, next) => {
@@ -48,7 +63,16 @@ router.post('/users/:id', validator.body(userSchema), async (req, res, next) => 
         .then(() => {
             res.status(StatusCodes.OK).send(status.USER_UPDATED);
         })
-        .catch((e) => next(e));
+        .catch((e) => {
+            next({
+                ...e,
+                methodName: 'userService.updateUser',
+                args: {
+                    id: req.params?.id,
+                    body: req.body
+                }
+            });
+        });
 });
 
 router.get('/users', async (req, res, next) => {
@@ -58,7 +82,16 @@ router.get('/users', async (req, res, next) => {
         .then((result) => {
             res.json(result);
         })
-        .catch((e) => next(e));
+        .catch((e) => {
+            next({
+                ...e,
+                methodName: 'userService.getAutoSuggestUsers',
+                args:{
+                    searchQuery,
+                    limit
+                }
+            });
+        });
 });
 
 
@@ -67,7 +100,13 @@ router.post('/group', validator.body(groupSchema), async (req, res, next) => {
         .then(() => {
             res.status(StatusCodes.CREATED).send(status.GROUP_CREATED);
         })
-        .catch((e) => next(e));
+        .catch((e) => {
+            next({
+                ...e,
+                methodName: 'groupService.createGroup',
+                args: req.body
+            });
+        });
 });
 
 router.get('/groups/:id', async (req, res, next) => {
@@ -79,7 +118,15 @@ router.get('/groups/:id', async (req, res, next) => {
                 res.json(user);
             }
         })
-        .catch((e) => next(e));
+        .catch((e) => {
+            next({
+                ...e,
+                methodName: 'groupService.getGroupById',
+                args:{
+                    id: req.params?.id
+                }
+            });
+        });
 });
 
 router.delete('/groups/:id', async (req, res, next) => {
@@ -87,7 +134,15 @@ router.delete('/groups/:id', async (req, res, next) => {
         .then(() => {
             res.status(StatusCodes.OK).send(status.GROUP_REMOVED);
         })
-        .catch((e) => next(e));
+        .catch((e) => {
+            next({
+                ...e,
+                methodName: 'groupService.removeGroup',
+                args:{
+                    id: req.params?.id
+                }
+            });
+        });
 });
 
 router.post('/gruops/:id', validator.body(groupSchema), async (req, res, next) => {
@@ -95,7 +150,16 @@ router.post('/gruops/:id', validator.body(groupSchema), async (req, res, next) =
         .then(() => {
             res.status(StatusCodes.OK).send(status.GROUP_UPDATED);
         })
-        .catch((e) => next(e));
+        .catch((e) => {
+            next({
+                ...e,
+                methodName: 'groupService.updateGroup',
+                args:{
+                    id: req.params?.id,
+                    body: req.body
+                }
+            });
+        });
 });
 
 router.get('/groups', async (req, res, next) => {
@@ -103,7 +167,12 @@ router.get('/groups', async (req, res, next) => {
         .then((result) => {
             res.json(result);
         })
-        .catch((e) => next(e));
+        .catch((e) => {
+            next({
+                ...e,
+                methodName: 'groupService.getAllGroups'
+            });
+        });
 });
 
 router.get('/user-groups', async (req, res, next) => {
@@ -113,7 +182,16 @@ router.get('/user-groups', async (req, res, next) => {
         .then((result) => {
             res.json(result);
         })
-        .catch((e) => next(e));
+        .catch((e) => {
+            next({
+                ...e,
+                methodName: 'userGroupService.addUsersToGroup',
+                args: {
+                    groupId,
+                    userIds
+                }
+            });
+        });
 });
 
 export default router;

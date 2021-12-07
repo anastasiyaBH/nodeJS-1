@@ -10,7 +10,7 @@ const errorMiddleware = (
     const status = 'status' in err ? err.status : 500;
     const message = err.message || 'Internal Server Error';
 
-    winstonLogger.error(err.name, { 'path':req.path, 'body':req.body, 'params':req.params, 'query':req.query, 'message': err.message });
+    winstonLogger.error(err.name, { 'path':req.path, 'body':req.body, 'params':req.params, 'query':req.query, 'message': err.message, 'methodName': err?.methodName, 'args':  err?.args });
 
     res.status(status).send({
         status,

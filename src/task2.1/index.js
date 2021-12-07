@@ -21,9 +21,11 @@ app.use(errorMiddleware);
 
 process.on('uncaughtException', (error, origin) => {
     winstonLogger.error('Uncaught Exception:', error, origin);
+    process.exit(1);
 });
 
 process.on('unhandledRejection', (error, origin) => {
     winstonLogger.error('Unhandled Rejection:', error, origin);
+    process.exit(1);
 });
 

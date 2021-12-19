@@ -5,7 +5,9 @@ const APP_CONFIG = {
     DB_NAME: 'Users',
     DB_USERNAME: 'postgres',
     DB_PASSWORD: 'ZPdk1928!',
-    DEFAULT_LIMIT: 10
+    DEFAULT_LIMIT: 10,
+    JWT_SECRET: 'node-app-jwt',
+    JWT_TOKEN_EXPIRATION: '8h'
 };
 
 export default APP_CONFIG;

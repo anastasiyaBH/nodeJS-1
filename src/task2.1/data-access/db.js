@@ -1,10 +1,14 @@
 import { Sequelize } from 'sequelize';
-import APP_CONFIG from '../config';
+
 import winstonLogger from '../middlewares/winston-logger';
 
-const db = new Sequelize(APP_CONFIG.DB_NAME, APP_CONFIG.DB_USERNAME, APP_CONFIG.DB_PASSWORD, {
-    host: APP_CONFIG.DB_HOST,
-    port: APP_CONFIG.DB_PORT,
+if (!process.env.DB_NAME || !process.env.DB_USERNAME || !process.env.DB_PASSWORD) {
+    throw new Error('Postgres Credentials Error');
+}
+
+const db = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     dialect: 'postgres',
     omitNull: true,
     define: {

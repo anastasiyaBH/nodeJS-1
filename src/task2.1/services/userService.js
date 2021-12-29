@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
 import { User } from '../models';
-import APP_CONFIG from '../config';
 
 
 class UserService {
@@ -46,7 +45,7 @@ class UserService {
                     [Op.substring]: loginSubstr || ''
                 }
             },
-            limit: limit || APP_CONFIG.DEFAULT_LIMIT,
+            limit: limit || process.env.DB_DEFAULT_LIMIT,
             attributes: [
                 'id', 'login', 'password', 'age'
             ]
@@ -71,7 +70,11 @@ class UserService {
             throw { status: StatusCodes.FORBIDDEN, message: ReasonPhrases.FORBIDDEN };
         }
 
-        return jwt.sign({ username }, APP_CONFIG.JWT_SECRET, { expiresIn: APP_CONFIG.JWT_TOKEN_EXPIRATION });
+        if (!process.env.JWT_SECRET || !process.env.JWT_TOKEN_EXPIRATION) {
+            throw new Error('JWT Credentials Error');
+        }
+
+        return jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TOKEN_EXPIRATION });
     }
 }
 

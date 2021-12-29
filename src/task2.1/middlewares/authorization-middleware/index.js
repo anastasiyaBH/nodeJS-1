@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import APP_CONFIG from '../../config';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
 const authorizationMiddleware = (
@@ -16,7 +15,11 @@ const authorizationMiddleware = (
         });
     }
 
-    return jwt.verify(jwtToken, APP_CONFIG.JWT_SECRET, { maxAge: APP_CONFIG.JWT_TOKEN_EXPIRATION }, (err) => {
+    if (!process.env.JWT_SECRET || !process.env.JWT_TOKEN_EXPIRATION) {
+        throw new Error('JWT Credentials Error');
+    }
+
+    return jwt.verify(jwtToken, process.env.JWT_SECRET, { maxAge: process.env.JWT_TOKEN_EXPIRATION }, (err) => {
         if (err) {
             res.status(StatusCodes.FORBIDDEN).send({
                 status: StatusCodes.FORBIDDEN,

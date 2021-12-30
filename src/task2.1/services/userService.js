@@ -3,16 +3,18 @@ import { Op } from 'sequelize';
 import jwt from 'jsonwebtoken';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
-import { User } from '../models';
-
 
 class UserService {
+    constructor(userModel) {
+        this.userModel = userModel;
+    }
+
     async createUser(user) {
-        return await User.create({ ...user, id: uuid() });
+        return await this.userModel.create({ ...user, id: uuid() });
     }
 
     async getUserById(id) {
-        return await User.findOne({
+        return await this.userModel.findOne({
             where: {
                 id
             },
@@ -23,7 +25,7 @@ class UserService {
     }
 
     async removeUser(id) {
-        return await User.destroy({
+        return await this.userModel.destroy({
             where: {
                 id
             }
@@ -31,7 +33,7 @@ class UserService {
     }
 
     async updateUser(id, payload) {
-        return await User.update(payload, {
+        return await this.userModel.update(payload, {
             where: {
                 id
             }
@@ -39,7 +41,7 @@ class UserService {
     }
 
     async getAutoSuggestUsers(loginSubstr, limit) {
-        return await User.findAll({
+        return await this.userModel.findAll({
             where: {
                 login: {
                     [Op.substring]: loginSubstr || ''
@@ -53,7 +55,7 @@ class UserService {
     }
 
     async login(username, password) {
-        const user = await User.findOne({
+        const user = await this.userModel.findOne({
             where: {
                 login: username
             },
@@ -78,4 +80,4 @@ class UserService {
     }
 }
 
-export default new UserService();
+export default UserService;

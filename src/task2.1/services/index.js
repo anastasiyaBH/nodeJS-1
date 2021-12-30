@@ -1,9 +1,10 @@
-import userService from './userService';
-import groupService from './groupService';
-import userGroupService from './userGroupService';
+import UserService from './userService';
+import GroupService from './groupService';
+import UserGroupService from './userGroupService';
 
-export {
-    userService,
-    groupService,
-    userGroupService
-};
+import { User, Group } from '../models';
+
+export const userService = new UserService(User);
+export const groupService = new GroupService(Group);
+export const userGroupService = UserGroupService;
+

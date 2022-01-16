@@ -3,17 +3,18 @@ import { Op } from 'sequelize';
 import jwt from 'jsonwebtoken';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
-import { User } from '../models';
-import APP_CONFIG from '../config';
-
 
 class UserService {
+    constructor(userModel) {
+        this.userModel = userModel;
+    }
+
     async createUser(user) {
-        return await User.create({ ...user, id: uuid() });
+        return await this.userModel.create({ ...user, id: uuid() });
     }
 
     async getUserById(id) {
-        return await User.findOne({
+        return await this.userModel.findOne({
             where: {
                 id
             },
@@ -24,7 +25,7 @@ class UserService {
     }
 
     async removeUser(id) {
-        return await User.destroy({
+        return await this.userModel.destroy({
             where: {
                 id
             }
@@ -32,7 +33,7 @@ class UserService {
     }
 
     async updateUser(id, payload) {
-        return await User.update(payload, {
+        return await this.userModel.update(payload, {
             where: {
                 id
             }
@@ -40,13 +41,13 @@ class UserService {
     }
 
     async getAutoSuggestUsers(loginSubstr, limit) {
-        return await User.findAll({
+        return await this.userModel.findAll({
             where: {
                 login: {
                     [Op.substring]: loginSubstr || ''
                 }
             },
-            limit: limit || APP_CONFIG.DEFAULT_LIMIT,
+            limit: limit || process.env.DB_DEFAULT_LIMIT,
             attributes: [
                 'id', 'login', 'password', 'age'
             ]
@@ -54,7 +55,7 @@ class UserService {
     }
 
     async login(username, password) {
-        const user = await User.findOne({
+        const user = await this.userModel.findOne({
             where: {
                 login: username
             },
@@ -71,8 +72,12 @@ class UserService {
             throw { status: StatusCodes.FORBIDDEN, message: ReasonPhrases.FORBIDDEN };
         }
 
-        return jwt.sign({ username }, APP_CONFIG.JWT_SECRET, { expiresIn: APP_CONFIG.JWT_TOKEN_EXPIRATION });
+        if (!process.env.JWT_SECRET || !process.env.JWT_TOKEN_EXPIRATION) {
+            throw new Error('JWT Credentials Error');
+        }
+
+        return jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TOKEN_EXPIRATION });
     }
 }
 
-export default new UserService();
+export default UserService;

@@ -1,14 +1,16 @@
 import { v4 as uuid } from 'uuid';
 
-import { Group } from '../models';
-
 class GroupService {
+    constructor(groupModel) {
+        this.groupModel = groupModel;
+    }
+
     async createGroup(user) {
-        return await Group.create({ ...user, id: uuid() });
+        return await this.groupModel.create({ ...user, id: uuid() });
     }
 
     async updateGroup(id, payload) {
-        return await Group.update(payload, {
+        return await this.groupModel.update(payload, {
             where: {
                 id
             }
@@ -16,11 +18,11 @@ class GroupService {
     }
 
     async getAllGroups() {
-        return await Group.findAll();
+        return await this.groupModel.findAll();
     }
 
     async getGroupById(id) {
-        return await Group.findOne({
+        return await this.groupModel.findOne({
             where: {
                 id
             }
@@ -28,7 +30,7 @@ class GroupService {
     }
 
     async removeGroup(id) {
-        return await Group.destroy({
+        return await this.groupModel.destroy({
             where: {
                 id
             }
@@ -36,4 +38,4 @@ class GroupService {
     }
 }
 
-export default new GroupService();
+export default GroupService;

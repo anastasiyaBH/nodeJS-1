@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
+import './config';
 import routes from './routes';
 import errorMiddleware from './middlewares/error-middleware';
 import loggerMiddleware from './middlewares/logger-middleware';
